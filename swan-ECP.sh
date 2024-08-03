@@ -5,6 +5,7 @@ function main_menu() {
     while true; do
         clear
         echo "脚本由大赌社区哈哈哈哈编写，推特 @ferdie_jhovie，免费开源，请勿相信收费"
+        echo "特别鸣谢 Silent ⚛| validator"
         echo "================================================================"
         echo "节点社区 Telegram 群组: https://t.me/niuwuriji"
         echo "节点社区 Telegram 频道: https://t.me/niuwuriji"
@@ -83,14 +84,26 @@ function install_node() {
     echo "初始化ECP存储库..."
     ./computing-provider init --multi-address=/ip4/$public_ip/tcp/$port --node-name=$node_name
 
-    # 生成新的钱包地址并存入 SwanETH
-    echo "请生成新的钱包地址并存入 SwanETH，参考以下命令："
-    ./computing-provider wallet new
+    # 生成新的钱包地址或通过私钥导入钱包
+    echo "请选择钱包操作:"
+    echo "1) 生成新的钱包地址并存入 SwanETH"
+    echo "2) 通过私钥导入钱包"
+    read -p "输入选项 (1 或 2): " wallet_choice
 
-    # 通过私钥导入钱包
-    echo "通过私钥导入刚刚跨链到 Swan 主网的钱包，参考以下命令："
-    ./computing-provider wallet import
-    echo "输入私钥并按回车键，即可导入密钥成功！"
+    case $wallet_choice in
+        1)
+            echo "生成新的钱包地址并存入 SwanETH，参考以下命令："
+            ./computing-provider wallet new
+            ;;
+        2)
+            echo "通过私钥导入刚刚跨链到 Swan 主网的钱包，参考以下命令："
+            ./computing-provider wallet import
+            echo "输入私钥并按回车键，即可导入密钥成功！"
+            ;;
+        *)
+            echo "无效的选项"
+            ;;
+    esac
 
     # 初始化ECP账户
     read -p "请输入您的 EVM 钱包地址作为 ownerAddress: " owner_address
