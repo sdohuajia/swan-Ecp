@@ -5,7 +5,7 @@ function main_menu() {
     while true; do
         clear
         echo "脚本由大赌社区哈哈哈哈编写，推特 @ferdie_jhovie，免费开源，请勿相信收费"
-        echo "特别鸣谢 Silent ⚛| validator"
+        echo "特别鸣谢 大赌哥"
         echo "================================================================"
         echo "节点社区 Telegram 群组: https://t.me/niuwuriji"
         echo "节点社区 Telegram 频道: https://t.me/niuwuriji"
