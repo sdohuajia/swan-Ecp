@@ -159,7 +159,8 @@ function view_zk_task_list() {
 # 查询节点日志的函数
 function query_node_logs() {
     echo "查询节点日志..."
-    cd ~/.swan/computing && tail -f ubi-ecp.log
+    cd ~/.swan/computing 
+    tail -f ubi-ecp.log
 }
 
 # 运行主菜单函数
