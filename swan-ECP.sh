@@ -20,12 +20,20 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
+        echo "2) 查看ZK任务列表"
+        echo "3) 查询节点日志"
         echo "0) 退出"
         read -p "输入选项 (0-3): " choice
 
         case $choice in
             1)
                 install_node
+                ;;
+            2)
+                view_zk_task_list
+                ;;
+            3)
+                query_node_logs
                 ;;
             0)
                 echo "退出脚本..."
@@ -129,7 +137,7 @@ function install_node() {
     echo "注意："
     echo "这里数量是指 ETH 数量，现在一天大概能接 48 个任务左右，一天花费就是 0.00048 ETH，根据你跑的时间决定存入多少 ETH。"
 
-    echo "将 SwanETH 存入 Sequencer 账户..."
+    echo "存款至SwanETHSequencer账户..."
     ./computing-provider sequencer add --from $sequencer_address $eth_amount
 
     # 启动服务
@@ -149,6 +157,18 @@ function install_node() {
     echo "所有操作完成！"
 }
 
+# 查看ZK任务列表的函数
+function view_zk_task_list() {
+    echo "查看ZK任务列表..."
+    ./computing-provider ubi list --show-failed
+}
+
+# 查询节点日志的函数
+function query_node_logs() {
+    echo "查询节点日志..."
+    cd ~/.swan/computing 
+    tail -f ubi-ecp.log
+}
 
 # 运行主菜单函数
 main_menu
