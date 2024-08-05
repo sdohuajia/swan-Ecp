@@ -25,8 +25,9 @@ function main_menu() {
         echo "4) 重新启动节点"
         echo "5) 查看当前运行的任务列表"
         echo "6) 检查 resource-exporter 日志"
+        echo "7) 验证ECP环境是否已成功安装"
         echo "0) 退出"
-        read -p "输入选项 (0-6): " choice
+        read -p "输入选项 (0-7): " choice
 
         case $choice in
             1)
@@ -47,6 +48,9 @@ function main_menu() {
             6)
                 check_resource_exporter_logs
                 ;;
+            7)
+                verify_ecp_installation
+                ;;
             0)
                 echo "退出脚本..."
                 exit 0
@@ -64,6 +68,14 @@ function main_menu() {
 function check_resource_exporter_logs() {
     echo "检查 resource-exporter 日志..."
     docker logs -f resource-exporter
+}
+
+# 验证ECP环境是否已成功安装的函数
+function verify_ecp_installation() {
+    read -p "请输入您的公共IP: " public_ip
+    read -p "请输入端口号: " port
+    echo "验证ECP环境是否已成功安装..."
+    curl -s http://$public_ip:$port/api/v1/computing/cp
 }
 
 # 安装节点的函数
