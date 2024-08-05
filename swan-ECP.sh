@@ -134,7 +134,7 @@ function install_node() {
 
     # 添加SWANCECP抵押贷款品
     read -p "请输入您的 EVM 钱包地址: " collateral_address
-    read -p "请输入托管的 SWANC 数量 (建议 140): " collateral_amount
+    read -p "请输入托管的 SWANC 数量 (建议 100以上): " collateral_amount
 
     echo "添加SWANCECP抵押贷款品..."
     ./computing-provider collateral add --ecp --from $collateral_address $collateral_amount
@@ -142,8 +142,6 @@ function install_node() {
     # 存款至SwanETHSequencer账户
     read -p "请输入您的 EVM 钱包地址: " sequencer_address
     read -p "请输入存入的 ETH 数量: " eth_amount
-    echo "注意："
-    echo "这里数量是指 ETH 数量，现在一天大概能接 48 个任务左右，一天花费就是 0.00048 ETH，根据你跑的时间决定存入多少 ETH。"
 
     echo "存款至SwanETHSequencer账户..."
     ./computing-provider sequencer add --from $sequencer_address $eth_amount
