@@ -23,8 +23,9 @@ function main_menu() {
         echo "2) 查看ZK任务列表"
         echo "3) 查询节点日志"
         echo "4) 重新启动节点"
+        echo "5) 查看当前运行的任务列表"
         echo "0) 退出"
-        read -p "输入选项 (0-4): " choice
+        read -p "输入选项 (0-5): " choice
 
         case $choice in
             1)
@@ -38,6 +39,9 @@ function main_menu() {
                 ;;
             4)
                 restart_node
+                ;;
+            5)
+                view_running_tasks
                 ;;
             0)
                 echo "退出脚本..."
@@ -170,7 +174,7 @@ function view_zk_task_list() {
 # 查询节点日志的函数
 function query_node_logs() {
     echo "查询节点日志..."
-    cd ~/.swan/computing 
+    cd ~/.swan/computing || exit
     tail -f ubi-ecp.log
 }
 
@@ -178,13 +182,26 @@ function query_node_logs() {
 function restart_node() {
     echo "正在修改 config.toml 文件..."
 
-    # 修改 config.toml 文件
-    config_file_path=~/.swan/computing/config.toml
-    sed -i 's/^EnableSequencer = .*/EnableSequencer = true/' "$config_file_path"
-    sed -i 's/^AutoChainProof = .*/AutoChainProof = false/' "$config_file_path"
+    # 切换到配置文件目录
+    cd ~/.swan/computing || exit
 
-    echo "修改完成。请退出 config.toml 文件并进行下一步操作。"
+    echo "请手动修改 config.toml 文件："
+    echo "[UBI]"
+    echo "EnableSequencer = true             # 将证明提交给 Sequencer 服务（默认值：true）"
+    echo "AutoChainProof = false             # 当Sequencer没有足够的资金或服务不可用时，自动向Swan链提交证明"
+    echo "修改此两处后，退出文件进行下一步"
 
+    # 等待用户手动修改配置文件
+    read -p "修改完成后，请按任意键继续..."
+
+    # 执行计算节点的命令
+    echo "请输入您的钱包地址: "
+    read -r wallet_address
+    echo "请输入存入的金额: "
+    read -r amount
+
+    echo "执行 sequencer add 命令..."
+    ./computing-provider sequencer add --from "$wallet_address" "$amount"
 
     # 设置环境变量并重新启动服务
     export FIL_PROOFS_PARAMETER_CACHE=$PARENT_PATH
@@ -201,6 +218,12 @@ function restart_node() {
     nohup ./computing-provider ubi daemon >> cp.log 2>&1 &
 
     echo "节点已重新启动。"
+}
+
+# 查看当前运行的任务列表的函数
+function view_running_tasks() {
+    echo "查看当前运行的任务列表..."
+    ./computing-provider task list -v
 }
 
 # 运行主菜单函数
