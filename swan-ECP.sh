@@ -22,8 +22,9 @@ function main_menu() {
         echo "1) 安装节点"
         echo "2) 查看ZK任务列表"
         echo "3) 查询节点日志"
+        echo "4) 重新启动节点"
         echo "0) 退出"
-        read -p "输入选项 (0-3): " choice
+        read -p "输入选项 (0-4): " choice
 
         case $choice in
             1)
@@ -34,6 +35,9 @@ function main_menu() {
                 ;;
             3)
                 query_node_logs
+                ;;
+            4)
+                restart_node
                 ;;
             0)
                 echo "退出脚本..."
@@ -168,6 +172,43 @@ function query_node_logs() {
     echo "查询节点日志..."
     cd ~/.swan/computing 
     tail -f ubi-ecp.log
+}
+
+# 重新启动节点的函数
+function restart_node() {
+    echo "正在修改 config.toml 文件..."
+
+    # 修改 config.toml 文件
+    config_file_path=~/.swan/computing/config.toml
+    sed -i 's/^EnableSequencer = .*/EnableSequencer = true/' "$config_file_path"
+    sed -i 's/^AutoChainProof = .*/AutoChainProof = false/' "$config_file_path"
+
+    echo "修改完成。请退出 config.toml 文件并进行下一步操作。"
+
+    # 执行计算节点的命令
+    echo "请输入您的钱包地址: "
+    read -r wallet_address
+    echo "请输入存入的金额: "
+    read -r amount
+
+    echo "执行 sequencer add 命令..."
+    ./computing-provider sequencer add --from "$wallet_address" "$amount"
+
+    # 设置环境变量并重新启动服务
+    export FIL_PROOFS_PARAMETER_CACHE=$PARENT_PATH
+
+    read -p "您的系统是否有GPU? (y/n): " has_gpu
+    if [ "$has_gpu" == "y" ]; then
+        read -p "请输入您的GPU型号和核心数（例如 GeForce RTX 4090:16384）: " gpu_info
+        export RUST_GPU_TOOLS_CUSTOM_GPU="$gpu_info"
+    else
+        echo "未检测到GPU，将跳过GPU设置。"
+    fi
+
+    echo "重新启动节点..."
+    nohup ./computing-provider ubi daemon >> cp.log 2>&1 &
+
+    echo "节点已重新启动。"
 }
 
 # 运行主菜单函数
