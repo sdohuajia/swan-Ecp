@@ -185,14 +185,6 @@ function restart_node() {
 
     echo "修改完成。请退出 config.toml 文件并进行下一步操作。"
 
-    # 执行计算节点的命令
-    echo "请输入您的钱包地址: "
-    read -r wallet_address
-    echo "请输入存入的金额: "
-    read -r amount
-
-    echo "执行 sequencer add 命令..."
-    ./computing-provider sequencer add --from "$wallet_address" "$amount"
 
     # 设置环境变量并重新启动服务
     export FIL_PROOFS_PARAMETER_CACHE=$PARENT_PATH
