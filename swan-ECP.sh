@@ -85,8 +85,8 @@ function install_node() {
     curl -fsSL https://raw.githubusercontent.com/swanchain/go-computing-provider/releases/ubi/setup.sh | bash
     
     # 创建文件夹并设置路径
-    mkdir /root/mkdir
-    export PARENT_PATH="/root/mkdir"
+    mkdir /root/V28_PARAMS_PATH  
+    export PARENT_PATH="/root/V28_PARAMS_PATH"
 
     # 提供用户选择下载参数的选项
     echo "请选择要下载的参数文件:"
