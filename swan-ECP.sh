@@ -83,12 +83,17 @@ function install_node() {
     # 下载并运行 setup.sh 脚本
     echo "下载并运行 setup.sh 脚本..."
     curl -fsSL https://raw.githubusercontent.com/swanchain/go-computing-provider/releases/ubi/setup.sh | bash
+    
+    # 创建文件夹并设置路径
+    mkdir /root/mkdir
+    export PARENT_PATH="/root/mkdir"
 
     # 提供用户选择下载参数的选项
     echo "请选择要下载的参数文件:"
     echo "1) 512MiB 参数"
     echo "2) 32GiB 参数"
     read -p "输入选项 (1 或 2): " param_choice
+
 
 case $param_choice in
         1)
