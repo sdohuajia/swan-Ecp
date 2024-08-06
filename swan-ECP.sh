@@ -90,33 +90,19 @@ function install_node() {
     echo "2) 32GiB 参数"
     read -p "输入选项 (1 或 2): " param_choice
 
-    # 设置文件夹名称，默认为 "mkdir"
-    folder_name="/mkdir"
-
-    # 创建文件夹
-    mkdir -p "$folder_name"
-
-    # 设置 PARENT_PATH 环境变量到创建的文件夹路径下
-    export PARENT_PATH="$folder_name"
-
-    # 切换到创建的文件夹
-    cd "$folder_name" || exit
-
 case $param_choice in
-    1)
-        echo "下载并运行 fetch-param-512.sh 脚本..."
-        curl -fsSL https://raw.githubusercontent.com/swanchain/go-computing-provider/releases/ubi/fetch-param-512.sh -o fetch-param-512.sh
-        bash fetch-param-512.sh
-        ;;
-    2)
-        echo "下载并运行 fetch-param-32.sh 脚本..."
-        curl -fsSL https://raw.githubusercontent.com/swanchain/go-computing-provider/releases/ubi/fetch-param-32.sh -o fetch-param-32.sh
-        bash fetch-param-32.sh
-        ;;
-    *)
-        echo "无效的选项"
-        ;;
-esac
+        1)
+            echo "下载并运行 fetch-param-512.sh 脚本..."
+            curl -fsSL https://raw.githubusercontent.com/swanchain/go-computing-provider/releases/ubi/fetch-param-512.sh | bash
+            ;;
+        2)
+            echo "下载并运行 fetch-param-32.sh 脚本..."
+            curl -fsSL https://raw.githubusercontent.com/swanchain/go-computing-provider/releases/ubi/fetch-param-32.sh | bash
+            ;;
+        *)
+            echo "无效的选项"
+            ;;
+    esac
 
 
     # 下载 computing-provider
